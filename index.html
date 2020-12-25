@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Vue</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script> -->
+</head>
+<body>
+
+    <div id="app"></div>
+    
+    <!-- VueJs -->
+    <!-- development version, includes helpful console warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script>
+        new Vue({
+            el: "#app",
+            template: `
+            <div class="container">
+                <h1>Comentários</h1>
+                <hr>
+                <div class="form-todo form-group">
+                    <p>
+                        <input type="text" placeholder="Nome" class="form-control" v-model="name">
+                    </p>
+                    <p>
+                        <textarea placeholder="Comentário" class="form-control" v-model="message"></textarea>
+                    </p>
+                    <button class="btn btn-info" v-on:click="addComment">Comentar</button>
+                    <hr>
+                </div>
+                <div class="list-group">
+                    <div class="list-group-item" v-for="(comment, index) in allComments">
+                        <span class="comment__author">Author: <strong>{{comment.name}}</strong></span>
+                        <span><p>{{comment.message}}</p></span>
+                        <div>
+                            <a href="#" title="Excluir" v-on:click.prevent="removeComment(index)">Excluir</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `,
+            data() {
+                return { 
+                    comments: [],
+                    name: "",
+                    message: ""
+                }
+            },
+            methods: {
+                addComment() {
+                    if(this.name.trim() != "" || this.message.trim() != ""){
+                        this.comments.push({
+                            name: this.name,
+                            message: this.message
+                        })
+                        this.name = ""
+                        this.message = ""
+                    }
+                },
+                removeComment(index) {
+                    this.comments.splice(index, 1)
+                }
+            },
+            computed: {
+                allComments() {
+                    return this.comments.map(comment=>({
+                        ...comment,
+                        name: comment.name.trim() === "" ? "Anônimo" : comment.name,
+                        message: comment.message.trim() == "" ? "Sem mensagem." : comment.message
+                    }))
+                }
+            },
+            watch: {
+                comments(comments) {
+                    console.log(comments)
+                }
+            }
+        })
+    </script>
+</body>
+</html>
