@@ -9,6 +9,6 @@ export default {
   name: 'app',
   components: {
     Comments
-  }
+  } 
 }
 </script>
