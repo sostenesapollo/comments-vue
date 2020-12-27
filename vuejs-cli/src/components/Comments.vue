@@ -3,16 +3,9 @@
         <div class="container">
             <h1>Comentários</h1>
             <hr>
-            <div class="form-todo form-group">
-                <p>
-                    <input type="text" placeholder="Nome" class="form-control" v-model="name">
-                </p>
-                <p>
-                    <textarea placeholder="Comentário" class="form-control" v-model="message"></textarea>
-                </p>
-                <button class="btn btn-info" v-on:click="addComment">Comentar</button>
-                <hr>
-            </div>
+
+            <FormTodo v-on:add-todo="addComment"></FormTodo>
+            
             <div class="list-group">
                 <div class="list-group-item" v-for="(comment, index) in allComments" :key="index">
                     <span class="comment__author">Author: <strong>{{comment.name}}</strong></span>
@@ -27,7 +20,12 @@
 </template>
 
 <script>
+import FormTodo from './FormTodo'
+
 export default {
+    components: {
+        FormTodo
+    },
     data() {
         return { 
             comments: [],
@@ -36,15 +34,8 @@ export default {
         }
     },
     methods: {
-        addComment() {
-            if(this.name.trim() != "" || this.message.trim() != ""){
-                this.comments.push({
-                    name: this.name,
-                    message: this.message
-                })
-                this.name = ""
-                this.message = ""
-            }
+        addComment(comment) {
+            this.comments.push(comment)
         },
         removeComment(index) {
             this.comments.splice(index, 1)
@@ -57,11 +48,6 @@ export default {
                 name: comment.name.trim() === "" ? "Anônimo" : comment.name,
                 message: comment.message.trim() == "" ? "Sem mensagem." : comment.message
             }))
-        }
-    },
-    watch: {
-        comments(comments) {
-            console.log(comments)
         }
     }
 }
